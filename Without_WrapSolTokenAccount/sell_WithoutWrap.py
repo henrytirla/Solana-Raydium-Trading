@@ -31,14 +31,6 @@ def getTimestamp():
         currentTimeStamp = "[" + timeStampData.strftime("%H:%M:%S.%f")[:-3] + "]"
         return currentTimeStamp
 
-
-async def get_transaction_with_timeout(client, txid, commitment=Confirmed, timeout=10):
-    # Wrap the synchronous get_transaction call in a coroutine
-    loop = asyncio.get_event_loop()
-    return await loop.run_in_executor(None, client.get_transaction, txid, "json")
-
-
-
 async def sell_normal(solana_client, TOKEN_TO_SWAP_SELL, payer):
     retry_count = 0
     while retry_count < MAX_RETRIES:
@@ -63,7 +55,7 @@ async def sell_normal(solana_client, TOKEN_TO_SWAP_SELL, payer):
             WSOL_token_account, WSOL_token_account_Instructions = get_token_account(solana_client, payer.pubkey(), sol)
             print(amount_in)
 
-            print("3. Create Swap Instructions...")
+            print("Create Swap Instructions...")
             instructions_swap = make_swap_instruction(amount_in,
                                                       swap_token_account,
                                                       WSOL_token_account,
@@ -88,14 +80,27 @@ async def sell_normal(solana_client, TOKEN_TO_SWAP_SELL, payer):
             txn = solana_client.send_transaction(swap_tx, payer)
             txid_string_sig = txn.value
             if txid_string_sig:
-                print(f"Transaction Signature: https://solscan.io/tx/{txid_string_sig}")
-                # Await transaction confirmation with a timeout
-                await asyncio.wait_for(
-                    get_transaction_with_timeout(solana_client, txid_string_sig, commitment="confirmed", timeout=10),
-                    timeout=15
-                )
+                print("Transaction sent")
+                # print(f"Transaction Signature Waiting to be confirmed: https://solscan.io/tx/{txid_string_sig}")
+                print("Waiting Confirmation")
+
+            confirmation_resp = solana_client.confirm_transaction(
+                txid_string_sig,
+                commitment=Confirmed,
+                sleep_seconds=0.5,
+            )
+
+            if confirmation_resp.value[0].err == None and str(
+                    confirmation_resp.value[0].confirmation_status) == "TransactionConfirmationStatus.Confirmed":
                 print("Transaction Confirmed")
-                return True
+                print(f"Transaction Signature: https://solscan.io/tx/{txid_string_sig}")
+
+                return
+
+            else:
+                print("Transaction not confirmed")
+                return False
+
         except asyncio.TimeoutError:
             print("Transaction confirmation timed out. Retrying...")
             retry_count += 1
@@ -105,10 +110,19 @@ async def sell_normal(solana_client, TOKEN_TO_SWAP_SELL, payer):
             retry_count += 1
             time.sleep(RETRY_DELAY)
         except Exception as e:
-            print(f"Unhandled exception: {e}. Retrying...")
-            # retry_count= MAX_RETRIES
-            retry_count+= 1
-            time.sleep(RETRY_DELAY)
+            if "block height exceeded" in str(e):
+                print("Transaction has expired due to block height exceeded. Retrying...",e.args[0])
+                retry_count += 1
+                await asyncio.sleep(RETRY_DELAY)
+            else:
+                print(f"Unhandled exception: {e}. Retrying...")
+                retry_count += 1
+                await asyncio.sleep(RETRY_DELAY)
+        # except Exception as e:
+        #     print(f"Unhandled exception: {e}. Retrying...")
+        #     # retry_count= MAX_RETRIES
+        #     retry_count+= 1
+        #     time.sleep(RETRY_DELAY)
 
             # return False
     print("Failed to confirm transaction after maximum retries.")
