@@ -22,7 +22,7 @@ async_solana_client= AsyncClient(config["RPC_HTTPS_URL"]) #Enter your API KEY in
 solana_client = Client(config["RPC_HTTPS_URL"])
 
 LAMPORTS_PER_SOL = 1000000000
-MAX_RETRIES = 5000
+MAX_RETRIES = 5
 RETRY_DELAY = 3
 
 #You can use getTimeStamp With Print Statments to evaluate How fast your transactions are confirmed
