@@ -1,19 +1,13 @@
 from spl.token.instructions import create_associated_token_account, get_associated_token_address
-
 from solders.pubkey import Pubkey
 from solders.instruction import Instruction
-
 from solana.rpc.types import TokenAccountOpts
 from solana.transaction import AccountMeta
-
-from util.layouts import SWAP_LAYOUT
-
+from WrapSol.utils.layouts import SWAP_LAYOUT
 import json, requests
-
 LAMPORTS_PER_SOL = 1000000000
 AMM_PROGRAM_ID = Pubkey.from_string('675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8')
 SERUM_PROGRAM_ID = Pubkey.from_string('srmqPvymJeFKQ4zGQed1GFppgkRHL9kaELCbyksJtPX')
-
 
 
 def make_swap_instruction(amount_in: int, token_account_in: Pubkey.from_string, token_account_out: Pubkey.from_string,
@@ -85,8 +79,7 @@ def extract_pool_info(pools_list: list, mint: str) -> dict:
             return pool
     raise Exception(f'{mint} pool not found!')
 
-# TODO Fix this to get swap instruction without an API
-#SOLVED!!!! DUE TO COMPETION I"M NOT GONNA OPEN SOURCE IT CONTACT ME--- FOR PURCHASE OR SUBSCRIBE to my site to get ready to use my solana bot
+
 def fetch_pool_keys(mint: str):
     amm_info = {}
     all_pools = {}
@@ -130,3 +123,10 @@ def fetch_pool_keys(mint: str):
         'asks': Pubkey.from_string(amm_info['marketAsks']),
         'event_queue': Pubkey.from_string(amm_info['marketEventQueue'])
     }
+
+
+
+
+
+
+
