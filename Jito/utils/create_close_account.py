@@ -8,9 +8,8 @@ import json, requests
 LAMPORTS_PER_SOL = 1000000000
 AMM_PROGRAM_ID = Pubkey.from_string('675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8')
 SERUM_PROGRAM_ID = Pubkey.from_string('srmqPvymJeFKQ4zGQed1GFppgkRHL9kaELCbyksJtPX')
-SWAP_LAYOUT = cStruct(
-    "instruction" / Int8ul, "amount_in" / Int64ul, "min_amount_out" / Int64ul
-)
+
+
 
 
 def make_swap_instruction(amount_in: int, token_account_in: Pubkey.from_string, token_account_out: Pubkey.from_string,
