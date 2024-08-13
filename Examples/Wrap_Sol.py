@@ -1,6 +1,5 @@
 import asyncio
 import os
-import sys
 import time
 from solana.rpc.commitment import Confirmed
 from solders.keypair import Keypair
@@ -9,7 +8,7 @@ from solders.pubkey import Pubkey
 from dotenv import load_dotenv
 from solana.rpc.api import Client
 from spl.token.client import Token
-from spl.token.constants import TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID, WRAPPED_SOL_MINT
+from spl.token.constants import TOKEN_PROGRAM_ID, WRAPPED_SOL_MINT
 from solana.transaction import Transaction
 from solders.transaction import VersionedTransaction
 from solders.message import MessageV0
@@ -83,19 +82,18 @@ async def send_and_confirm_transaction_via_jito(client, payer, max_attempts=3):
                 txs = []
                 is_leader_slot = False
                 print("waiting for jito leader...")
-                # while not is_leader_slot:
-                #     time.sleep(0.5)
-                #     next_leader = await jito_client.GetNextScheduledLeader(NextScheduledLeaderRequest())
-                #     num_slots_to_leader = next_leader.next_leader_slot - next_leader.current_slot
-                #     # print(f"waiting {num_slots_to_leader} slots to jito leader")
-                #     is_leader_slot = num_slots_to_leader <= 5
+                while not is_leader_slot:
+                    time.sleep(0.5)
+                    next_leader = await jito_client.GetNextScheduledLeader(NextScheduledLeaderRequest())
+                    num_slots_to_leader = next_leader.next_leader_slot - next_leader.current_slot
+                    # print(f"waiting {num_slots_to_leader} slots to jito leader")
+                    is_leader_slot = num_slots_to_leader <= 5
 
                 if is_initialized:
                     transaction.add( ix2,ix3, ix4)
                 else:
                     print("sending else")
                     transaction.add(ix2, ix3, ix4)
-                # transaction.add(ix2, ix3, ix4)
 
 
                 instructions = [ix for ix in transaction.instructions]
