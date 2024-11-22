@@ -10,7 +10,7 @@ from solana.rpc.async_api import AsyncClient
 from solders.compute_budget import set_compute_unit_price,set_compute_unit_limit
 from spl.token.instructions import create_associated_token_account, get_associated_token_address, close_account, \
     CloseAccountParams
-from util.create_close_account import  fetch_pool_keys,  make_swap_instruction
+from utils.create_close_account import  fetch_pool_keys,  make_swap_instruction
 from spl.token.client import Token
 from spl.token.core import _TokenCore
 

@@ -48,11 +48,10 @@ async_solana_client = AsyncClient(os.getenv("RPC_HTTPS_URL"))
 payer=Keypair.from_base58_string(os.getenv("PrivateKey"))
 Wsol_TokenAccount=os.getenv('WSOL_TokenAccount')
 
-
 AMM_PROGRAM_ID = Pubkey.from_string('675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8')
 SERUM_PROGRAM_ID = Pubkey.from_string('srmqPvymJeFKQ4zGQed1GFppgkRHL9kaELCbyksJtPX')
 LAMPORTS_PER_SOL = 1000000000
-MAX_RETRIES = 2
+MAX_RETRIES = 3
 RETRY_DELAY = 3
 
 class style():
@@ -130,7 +129,7 @@ async def buy(solana_client, TOKEN_TO_SWAP_BUY, payer, amount):
             print("Sending Through Jito")
 
             jito_payer = Keypair.from_base58_string(os.getenv("JITO_PRIVATE_KEY"))
-            BLOCK_ENGINE_URL = "frankfurt.mainnet.block-engine.jito.wtf"
+            BLOCK_ENGINE_URL = "amsterdam.mainnet.block-engine.jito.wtf"
             # jito_client=  get_searcher_client(BLOCK_ENGINE_URL,jito_payer)
             jito_client = await get_async_searcher_client(BLOCK_ENGINE_URL, jito_payer)
             txs = []
@@ -168,6 +167,7 @@ async def buy(solana_client, TOKEN_TO_SWAP_BUY, payer, amount):
             )
 
             tx1 = VersionedTransaction(msg, [payer])
+
 
             txs.append(tx1)
 
@@ -218,6 +218,6 @@ async def main():
 
     token_toBuy="RUpbmGF6p42AAeN1QvhFReZejQry1cLkE1PUYFVVpnL"
     print(payer.pubkey())
-    await buy(solana_client, token_toBuy, payer, 0.012593837)
+    await buy(solana_client, token_toBuy, payer, 0.0012593837)
 
 asyncio.run(main())

@@ -3,7 +3,7 @@ from solders.pubkey import Pubkey
 from solders.instruction import Instruction
 from solana.rpc.types import TokenAccountOpts
 from solana.transaction import AccountMeta
-from WrapSol.utils.layouts import SWAP_LAYOUT
+from WrapSol__PriorityFees.utils.layouts import SWAP_LAYOUT
 import json, requests
 LAMPORTS_PER_SOL = 1000000000
 AMM_PROGRAM_ID = Pubkey.from_string('675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8')

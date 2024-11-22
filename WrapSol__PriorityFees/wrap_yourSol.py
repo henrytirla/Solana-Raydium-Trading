@@ -69,9 +69,9 @@ transaction = Transaction()
 
 if  wallet_solToken_acc is None:
 
-    transaction.add(createWSOL_Acc,transfer(params),sync_native(params_sync),set_compute_unit_price(25_854),set_compute_unit_limit(101_337))
+    transaction.add(createWSOL_Acc,transfer(params),sync_native(params_sync),set_compute_unit_price(498_750),set_compute_unit_limit(4_000_000))
 else:
-    transaction.add(transfer(params),sync_native(params_sync),set_compute_unit_price(25_854),set_compute_unit_limit(101_337))
+    transaction.add(transfer(params),sync_native(params_sync),set_compute_unit_price(498_750),set_compute_unit_limit(4_000_000))
 
 
 
@@ -87,7 +87,7 @@ async def send_and_confirm_transaction(client, transaction, payer, max_attempts=
                 txid_string_sig = txn.value
                 if txid_string_sig:
                     print("Transaction sent")
-                    # print(f"Transaction Signature Waiting to be confirmed: https://solscan.io/tx/{txid_string_sig}")
+                    print(f"Transaction Signature Waiting to be confirmed: https://solscan.io/tx/{txid_string_sig}")
                     print("Waiting Confirmation")
 
                 confirmation_resp = await async_solana_client.confirm_transaction(
