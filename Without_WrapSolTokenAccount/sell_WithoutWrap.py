@@ -10,8 +10,8 @@ from solana.rpc.api import Client
 from solders.compute_budget import set_compute_unit_price,set_compute_unit_limit
 from solders.transaction import Transaction
 from spl.token.instructions import CloseAccountParams, close_account
-from util.create_close_account import fetch_pool_keys, get_token_account, make_swap_instruction ,sell_get_token_account
-from util.dexscreener import getSymbol
+from utils.create_close_account import fetch_pool_keys, get_token_account, make_swap_instruction ,sell_get_token_account
+from utils.dexscreener import getSymbol
 from solana.transaction import Transaction
 from spl.token.constants import WRAPPED_SOL_MINT
 from dotenv import dotenv_values
